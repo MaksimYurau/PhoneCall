@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
-    private val REQUEST_CALL = 1
+    private val requestCall = 1
     private lateinit var etNumber: EditText
     private lateinit var btCall: ImageButton
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 ActivityCompat.requestPermissions(
                     this,
-                    arrayOf({ Manifest.permission.CALL_PHONE }.toString()), REQUEST_CALL
+                    arrayOf({ Manifest.permission.CALL_PHONE }.toString()), requestCall
                 )
             }
             try {
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CALL) {
+        if (requestCode == requestCall) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 btCallOnClickListener()
             } else {
