@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhoneCall</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="please_enter_number">Please enter number!</string>
 </resources>
