@@ -1,14 +1,19 @@
 package com.maksimyurau.android.phonecall
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
+    private val REQUEST_CALL = 1
     private lateinit var etNumber: EditText
     private lateinit var btCall: ImageButton
 
@@ -26,6 +31,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun btCallOnClickListener() {
         btCall.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CALL_PHONE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf({ Manifest.permission.CALL_PHONE }.toString()), REQUEST_CALL
+                )
+            }
             try {
                 val phone = etNumber.text.toString()
                 if (phone.isEmpty()) {
@@ -43,6 +58,22 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: SecurityException) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CALL) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                btCallOnClickListener()
+            } else {
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
